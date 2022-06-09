@@ -9,14 +9,18 @@
 function Activate() {
     global $wpdb;
 
-    $sql = "CREATE TABLE IF NOT EXISTS { $wpdb->prefix}credentials(
+    $table_name = $wpdb->prefix . 'credentials';
+    $charset_collate = $wpdb->get_charset_collate();
+
+    $sql = "CREATE TABLE IF NOT EXISTS $table_name (
         `CredentialsId` INT NOT NULL AUTO_INCREMENT,
         `Url` VARCHAR(80) NULL,
         `Key` VARCHAR(80) NULL,
         `Secret` VARCHAR(80) NULL,
-        PRIMARY KEY (`CredentialsId`));";
+        PRIMARY KEY (`CredentialsId`)) $charset_collate;";
         
-        $wpdb->query($sql);
+        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        dbDelta( $sql );
 }
 
 function Deactivate() {
