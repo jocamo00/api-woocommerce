@@ -41,27 +41,27 @@ $data = json_decode($data, true);*/
           <input type="text" id="txtKey" name="txtKey">
           <label for="txtSecret">Url</label>
           <input type="text" id="txtSecret" name="txtSecret">
-          <input type="submit" value="save">
+          <input type="submit" value="save" id="btnSave">
         </div>
       </form>
     </div>
 
     <?php
-      $txtUrl = $_POST['txtUrl'];
-      $txtKey = $_POST['txtKey'];
-      $txtSecret = $_POST['txtSecret'];
+      $txtUrl = 'http://localhost/woocommerce_site/' /*$_POST['txtUrl']*/;
+      $txtKey = 'ck_f05265aebab2c3dc01aa047b34961f56412db138' /*$_POST['txtKey']*/;
+      $txtSecret = 'cs_f1c5b16a37189ef48588a6b3822c5344922c7646' /*$_POST['txtSecret']*/;
 
+        $table_name = $wpdb->prefix . 'credentials';
 
-      $table_name = $wpdb->prefix . 'credentials';
+        $wpdb->insert( 
+          $table_name, 
+          array( 
+            'Url' => $txtUrl, 
+            'Key' => $txtKey, 
+            'Secret' => $txtSecret, 
+          ) 
+        );
 
-      $wpdb->insert( 
-        $table_name, 
-        array( 
-          'Url' => $txtUrl, 
-          'Key' => $txtKey, 
-          'Secret' => $txtSecret, 
-        ) 
-      );
 
 
       require __DIR__ . '/vendor/autoload.php';

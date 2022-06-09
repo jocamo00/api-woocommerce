@@ -35,9 +35,9 @@ register_deactivation_hook(__FILE__, 'Deactivate');
 
 
 // Administration menu
-add_action('admin_menu', 'createMenu');
+add_action('admin_menu', 'CreateMenu');
 
-function createMenu() {
+function CreateMenu() {
     add_menu_page(
         'API Woocommerce Products', //title page
         'API Woocommerce', //title menu
@@ -48,4 +48,28 @@ function createMenu() {
         '1' //menu position
     );
 }
+
+
+// Add Bootstrap
+function AddBootstrapJS($hook) {
+    //echo "<script>console.log('$hook')</script>";
+    if($hook != "api-woocommerce/products.php") {return;}
+    wp_enqueue_script('bootstrapJS', plugins_url('admin/bootstrap/js/bootstrap.min.js', __FILE__),array('jquery'));
+}
+add_action('admin_enqueue_scripts', 'AddBootstrapJS');
+
+
+function AddBootstrapCSS($hook) {
+    if($hook != "api-woocommerce/products.php") {return;}
+    wp_enqueue_style('bootstrapCSS', plugins_url('admin/bootstrap/css/bootstrap.min.css', __FILE__));
+}
+add_action('admin_enqueue_scripts', 'AddBootstrapCSS');
+
+
+// Add my JS
+function AddJS($hook) {
+    if($hook != "api-woocommerce/products.php") {return;}
+    wp_enqueue_script('externalJS', plugins_url('admin/js/products.js', __FILE__),array('jquery'));
+}
+add_action('admin_enqueue_scripts', 'AddJS');
 
