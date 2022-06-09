@@ -1,0 +1,17 @@
+{
+    "name": "jose/api-woocommerce",
+    "description": "API Woodomerce",
+    "autoload": {
+        "psr-4": {
+            "Jose\\ApiWoocommerce\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jose Carreres"
+        }
+    ],
+    "require": {
+        "automattic/woocommerce": "^3.1"
+    }
+}
