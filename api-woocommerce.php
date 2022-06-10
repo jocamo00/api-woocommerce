@@ -2,9 +2,13 @@
 
 /*
 * Plugin name: API Woocommerce
-* Description: Woocommerce api test plugin
-* Version: 0.0.1
+* Description: Plugin API Woocommerce
+* Version: 1.0.0
 */
+
+if ( ! defined ('WPINC')) {
+    die;
+}
 
 function Activate() {
     global $wpdb;
@@ -24,7 +28,7 @@ function Activate() {
 }
 
 function Deactivate() {
-
+    flush_rewrite_rules();
 }
 
 
@@ -72,4 +76,6 @@ function AddJS($hook) {
     wp_enqueue_script('externalJS', plugins_url('admin/js/products.js', __FILE__),array('jquery'));
 }
 add_action('admin_enqueue_scripts', 'AddJS');
+
+
 
