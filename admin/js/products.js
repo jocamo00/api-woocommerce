@@ -1,5 +1,6 @@
 jQuery(document).ready(function($) {
   
+    
     /* Credenciales pruebas 
     * url = 'https://kaisustainable.com'
     * key = 'ck_189de7256b695ed711512d3235a37c197ee11fd6'
@@ -7,9 +8,10 @@ jQuery(document).ready(function($) {
     */
 
     createFormData();
+    createSearchProduct();
     pagination();
 
-    
+
 // form
     function createFormData() {
         $('#formData').html(`
@@ -31,6 +33,69 @@ jQuery(document).ready(function($) {
             </form>
         `);
     }
+
+
+// search products
+    function createSearchProduct() {
+        $('#searchData').html(`
+            <form class="d-flex justify-content-end" role="search">
+                <input type="text" class="text me-2" name="SearchProduct" id="InputSearch" placeholder="Search" aria-label="Search">
+                <button type="button" class="btn btn-outline-secondary" name="btnSearch" id="btnSearch">Search</button>
+            </form>
+        `);
+    }
+
+    function searchProduct() {
+        var url = $('input:text[name=InputUrl]').val();
+            var key = $('input:text[name=InputKey]').val();
+            var secret = $('input:text[name=InputSecret]').val();
+            var search = $('input:text[name=SearchProduct]').val();
+            
+            $('#tableData').html(`
+                <table class="table table-striped mt-5">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Stock status</th>
+                        <th>Stock quantity</th>
+                    </tr>
+                    </thead>
+                    <tbody id="res"></tbody>
+                </table>
+            `);
+
+            var settings = {
+                "url": `${url}/wp-json/wc/v3/products?search=${search}&consumer_key=${key}&consumer_secret=${secret}`,
+                "method": "GET",
+                "timeout": 0,
+            };
+            
+            
+            $.ajax(settings).done(function (response) {
+                $('#res').html('');
+                for (let item of response) {
+                    console.log(item);
+                    res.innerHTML += `
+                        <tr>
+                            <td>${item.id}</td>
+                            <td>${item.name}</td>
+                            <td>${item.price}</td>
+                            <td>${item.stock_status}</td>
+                            <td>${item.stock_quantit}</td>
+                        </tr>
+                    `}
+            });
+    }
+        $( "#InputSearch" ).keyup(function() {
+            searchProduct();
+          });
+
+        $('#btnSearch').click(function() {
+            searchProduct();
+        });
+    
 
 
 // list products
@@ -79,7 +144,7 @@ jQuery(document).ready(function($) {
 
               $('#btnSave').removeClass('invisible');
         });
-
+        
 
 // pagination
         function pagination() {

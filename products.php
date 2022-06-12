@@ -9,11 +9,13 @@
 </head>
 <body>
 
-<?php echo "<h1 class='text-center'>" . get_admin_page_title() . "</h1>"; ?>
-
+<?php echo "<h1 class='text-center mt-2 mb-3'>" . get_admin_page_title() . "</h1>"; ?>
+    
     <div class="container" id="formData"></div>
+    <div class="container" id="searchData"></div>
     <div class="container" id="tableData"></div>
     <div class="container d-flex justify-content-between invisible" id="pagination"></div>
+    
 
     <?php
 
