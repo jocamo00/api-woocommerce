@@ -1,18 +1,11 @@
 jQuery(document).ready(function($) {
   
-    
-    /* Credenciales pruebas 
-    * url = 'https://kaisustainable.com'
-    * key = 'ck_189de7256b695ed711512d3235a37c197ee11fd6'
-    * secret = 'cs_b3f4957a5f38fd426f64b0edb6d823238d2bc222'
-    */
-
     createFormData();
     createSearchProduct();
     pagination();
 
 
-// form
+// create form
     function createFormData() {
         $('#formData').html(`
             <form method="post" id="formCredentials">
@@ -35,7 +28,78 @@ jQuery(document).ready(function($) {
     }
 
 
-// search products
+// save form
+    /*$('#btnSave').click(function() {
+        var Url = document.getElementById('InputUrl').value;
+        var Key = document.getElementById('InputKey').value;
+        var Secret = document.getElementById('InputSecret').value;
+
+        var route = "InputUrl="+Url+"&InputKey="+Key+"&InputSecret="+Secret;
+
+        $.ajax({
+            url: 'products.php',
+            type: 'POST',
+            data: route,
+        })
+        .fail(function() {
+            console.log("error");
+        })
+        .always (function() {
+            console.log('complete');
+        })
+    });*/
+
+
+// list products
+    $('#btnProducts').click(function() {
+        var url = $('input:text[name=InputUrl]').val();
+        var key = $('input:text[name=InputKey]').val();
+        var secret = $('input:text[name=InputSecret]').val();
+
+        $('#tableData').html(`
+            <table class="table table-striped mt-5">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Stock status</th>
+                    <th>Stock quantity</th>
+                </tr>
+                </thead>
+                <tbody id="res"></tbody>
+            </table>
+        `);
+
+        $('#pagination').removeClass('invisible');
+
+        var settings = {
+            "url": `${url}/wp-json/wc/v3/products?consumer_key=${key}&consumer_secret=${secret}`,
+            "method": "GET",
+            "timeout": 0,
+        };
+        
+        $.ajax(settings).done(function (response) {
+            let i = 0;
+            $('#res').html('');
+            for (let item of response) {
+                i++;
+                res.innerHTML += `
+                    <tr>
+                        <td id='${i}'>${item.id}</td>
+                        <td>${item.name}</td>
+                        <td>${item.price}</td>
+                        <td>${item.stock_status}</td>
+                        <td>${item.stock_quantit}</td>
+                    </tr>
+                `}
+        });
+
+        $('#btnSave').removeClass('invisible');
+    });     
+        
+
+// create search 
     function createSearchProduct() {
         $('#searchData').html(`
             <form class="d-flex justify-content-end" role="search">
@@ -45,6 +109,8 @@ jQuery(document).ready(function($) {
         `);
     }
 
+
+// search products
     function searchProduct() {
         var url = $('input:text[name=InputUrl]').val();
             var key = $('input:text[name=InputKey]').val();
@@ -76,7 +142,6 @@ jQuery(document).ready(function($) {
             $.ajax(settings).done(function (response) {
                 $('#res').html('');
                 for (let item of response) {
-                    console.log(item);
                     res.innerHTML += `
                         <tr>
                             <td>${item.id}</td>
@@ -95,38 +160,35 @@ jQuery(document).ready(function($) {
         $('#btnSearch').click(function() {
             searchProduct();
         });
-    
 
 
-// list products
-        $('#btnProducts').click(function() {
+// pagination
+    function pagination() {
+        var numPagination = 1;
+
+        $('#pagination').html(`
+            <button type="button" class="btn btn-outline-dark invisible" id="btnBack"><--</button>
+            <button type="button" class="btn btn-outline-dark" id="btnNext">--></button>
+        `);
+
+        $('#btnNext').click(function() {
             var url = $('input:text[name=InputUrl]').val();
             var key = $('input:text[name=InputKey]').val();
             var secret = $('input:text[name=InputSecret]').val();
+            numPagination ++;
 
-            $('#tableData').html(`
-                <table class="table table-striped mt-5">
-                    <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Stock status</th>
-                        <th>Stock quantity</th>
-                    </tr>
-                    </thead>
-                    <tbody id="res"></tbody>
-                </table>
-            `);
+            if(numPagination > 1) {
+                $('#btnBack').removeClass('invisible');
+            } else {
+                $('#btnBack').addClass('invisible');
+            }
 
-            $('#pagination').removeClass('invisible');
-
-            var settings = {
-                "url": `${url}/wp-json/wc/v3/products?consumer_key=${key}&consumer_secret=${secret}`,
+            var settings = {        
+                "url": `${url}/wp-json/wc/v3/products?page=${numPagination}&consumer_key=${key}&consumer_secret=${secret}`,
                 "method": "GET",
                 "timeout": 0,
             };
-              
+            
             $.ajax(settings).done(function (response) {
                 $('#res').html('');
                 for (let item of response) {
@@ -140,88 +202,43 @@ jQuery(document).ready(function($) {
                             <td>${item.stock_quantit}</td>
                         </tr>
                     `}
-              });
-
-              $('#btnSave').removeClass('invisible');
+            });
         });
         
+        $('#btnBack').click(function() {
+            var url = $('input:text[name=InputUrl]').val();
+            var key = $('input:text[name=InputKey]').val();
+            var secret = $('input:text[name=InputSecret]').val();
+            numPagination --;
 
-// pagination
-        function pagination() {
-            var numPagination = 1;
+            if(numPagination > 1) {
+                $('#btnBack').removeClass('invisible');
+            } else {
+                $('#btnBack').addClass('invisible');
+            }
 
-            $('#pagination').html(`
-                <button type="button" class="btn btn-outline-dark invisible" id="btnBack"><--</button>
-                <button type="button" class="btn btn-outline-dark" id="btnNext">--></button>
-            `);
-
-            $('#btnNext').click(function() {
-                var url = $('input:text[name=InputUrl]').val();
-                var key = $('input:text[name=InputKey]').val();
-                var secret = $('input:text[name=InputSecret]').val();
-                numPagination ++;
-
-                if(numPagination > 1) {
-                    $('#btnBack').removeClass('invisible');
-                } else {
-                    $('#btnBack').addClass('invisible');
-                }
-
-                var settings = {        
-                    "url": `${url}/wp-json/wc/v3/products?page=${numPagination}&consumer_key=${key}&consumer_secret=${secret}`,
-                    "method": "GET",
-                    "timeout": 0,
-                };
-                
-                $.ajax(settings).done(function (response) {
-                    $('#res').html('');
-                    for (let item of response) {
-                        console.log(item);
-                        res.innerHTML += `
-                            <tr>
-                                <td>${item.id}</td>
-                                <td>${item.name}</td>
-                                <td>${item.price}</td>
-                                <td>${item.stock_status}</td>
-                                <td>${item.stock_quantit}</td>
-                            </tr>
-                        `}
-                });
-            });
+            var settings = {
+                "url": `${url}/wp-json/wc/v3/products?page=${numPagination}&consumer_key=${key}&consumer_secret=${secret}`,
+                "method": "GET",
+                "timeout": 0,
+            };
             
-            $('#btnBack').click(function() {
-                var url = $('input:text[name=InputUrl]').val();
-                var key = $('input:text[name=InputKey]').val();
-                var secret = $('input:text[name=InputSecret]').val();
-                numPagination --;
-
-                if(numPagination > 1) {
-                    $('#btnBack').removeClass('invisible');
-                } else {
-                    $('#btnBack').addClass('invisible');
-                }
-
-                var settings = {
-                    "url": `${url}/wp-json/wc/v3/products?page=${numPagination}&consumer_key=${key}&consumer_secret=${secret}`,
-                    "method": "GET",
-                    "timeout": 0,
-                  };
-                  
-                  $.ajax(settings).done(function (response) {
-                    $('#res').html('');
-                    for (let item of response) {
-                        console.log(item);
-                        res.innerHTML += `
-                            <tr>
-                                <td>${item.id}</td>
-                                <td>${item.name}</td>
-                                <td>${item.price}</td>
-                                <td>${item.stock_status}</td>
-                                <td>${item.stock_quantit}</td>
-                            </tr>
-                        `}
-                  });
+            $.ajax(settings).done(function (response) {
+                $('#res').html('');
+                for (let item of response) {
+                    console.log(item);
+                    res.innerHTML += `
+                        <tr>
+                            <td>${item.id}</td>
+                            <td>${item.name}</td>
+                            <td>${item.price}</td>
+                            <td>${item.stock_status}</td>
+                            <td>${item.stock_quantit}</td>
+                        </tr>
+                    `}
             });
-        }    
+        });
+    }       
 });
+
 
