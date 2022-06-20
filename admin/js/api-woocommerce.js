@@ -18,7 +18,7 @@ jQuery(document).ready(function($) {
         pagination();
     
     
-    // list products
+// list products
         $('#btnProducts').click(function() {
             let url = $('#stp_api_text_field_0').val();
             let key = $('#stp_api_text_field_1').val();
@@ -54,7 +54,7 @@ jQuery(document).ready(function($) {
         });     
             
     
-    // create search 
+// create search 
         function createSearchProduct() {
             $('#searchData').html(`
                 <form class="d-flex justify-content-end" role="search">
@@ -65,7 +65,7 @@ jQuery(document).ready(function($) {
         }
     
     
-    // search products
+// search products
         function searchProduct() {
             let url = $('#stp_api_text_field_0').val();
             let key = $('#stp_api_text_field_1').val();
@@ -104,7 +104,7 @@ jQuery(document).ready(function($) {
             });
     
     
-    // pagination
+// pagination
         function pagination() {
             let numPagination = 1;
     

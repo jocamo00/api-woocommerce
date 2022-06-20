@@ -6,6 +6,8 @@
 * Author: Jose Carreres
 */
 
+include('classes.php');
+
 add_action('admin_menu', 'stp_api_add_admin_menu');
 add_action('admin_init', 'stp_api_settings_init');
 
@@ -13,10 +15,6 @@ add_action('admin_init', 'stp_api_settings_init');
 function stp_api_add_admin_menu() {
     add_menu_page( 'Settings API Woocommerce', 'Settings API Woocommerce', 'manage_options', 'settings-api-page', 'stp_api_options_page' );
 }
-
-
-include('class.php');
-
 
 
 function stp_api_settings_init() {
@@ -27,12 +25,12 @@ function stp_api_settings_init() {
     $stp_api_text_field_1 = new Field();
     $stp_api_text_field_2 = new Field();
 
-    // Register configuration
+// Register configuration
     register_setting( $register_setting ->set_option_group('stpPlugin'), 
                       $register_setting ->set_option_name('stp_api_settings') 
                     );
 
-    // Add a section to a page
+// Add a section to a page
     add_settings_section(
         $setting_section ->set_id('stp_api_stpPlugin_section'),
         __( $setting_section ->set_title('Credentials section'), 'wordpress' ),
@@ -40,7 +38,7 @@ function stp_api_settings_init() {
         $setting_section ->set_page('stpPlugin')
     );
 
-    // Defines a configuration field within a section
+// Defines a configuration field within a section
     add_settings_field(
         $stp_api_text_field_0 ->set_id('stp_api_text_field_0'),
         __( $stp_api_text_field_0 ->set_title('Url'), 'wordpress' ),
