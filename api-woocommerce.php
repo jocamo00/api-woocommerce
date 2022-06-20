@@ -11,14 +11,23 @@ include('classes.php');
 add_action('admin_menu', 'stp_api_add_admin_menu');
 add_action('admin_init', 'stp_api_settings_init');
 
+
+
 // Add menu page
 function stp_api_add_admin_menu() {
-    add_menu_page( 'Settings API Woocommerce', 'Settings API Woocommerce', 'manage_options', 'settings-api-page', 'stp_api_options_page' );
+    $add_menu = new Menu();
+
+    add_menu_page(  $add_menu ->set_page_title('Settings API Woocommerce'), 
+                    $add_menu ->set_menu_title('Settings API Woocommerce'), 
+                    $add_menu ->set_capability('manage_options'), 
+                    $add_menu ->set_menu_slug('settings-api-page'), 
+                    $add_menu ->set_function('stp_api_options_page') 
+                );
 }
 
 
 function stp_api_settings_init() {
-    $register_setting = new register();
+    $register_setting = new Register();
     $setting_section = new Setting();
 
     $stp_api_text_field_0 = new Field();
@@ -84,7 +93,7 @@ function stp_api_settings_section_callback() {
 }
 
 // Generate html
-function stp_api_options_page( $hook ) {
+function stp_api_options_page() {
     ?>
     <div class="container">
         <form action='options.php' method='post'>

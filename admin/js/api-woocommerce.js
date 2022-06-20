@@ -183,5 +183,3 @@ jQuery(document).ready(function($) {
         }       
     });
     
-    
-    
