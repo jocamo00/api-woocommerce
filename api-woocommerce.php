@@ -15,41 +15,54 @@ function stp_api_add_admin_menu() {
 }
 
 
+include('class.php');
+
+
+
 function stp_api_settings_init() {
+    $register_setting = new register();
+    $setting_section = new Setting();
+
+    $stp_api_text_field_0 = new Field();
+    $stp_api_text_field_1 = new Field();
+    $stp_api_text_field_2 = new Field();
+
     // Register configuration
-    register_setting( 'stpPlugin', 'stp_api_settings' );
+    register_setting( $register_setting ->set_option_group('stpPlugin'), 
+                      $register_setting ->set_option_name('stp_api_settings') 
+                    );
 
     // Add a section to a page
     add_settings_section(
-        'stp_api_stpPlugin_section',
-        __( 'Credentials section', 'wordpress' ),
-        'stp_api_settings_section_callback',
-        'stpPlugin'
+        $setting_section ->set_id('stp_api_stpPlugin_section'),
+        __( $setting_section ->set_title('Credentials section'), 'wordpress' ),
+        $setting_section ->set_callback('stp_api_settings_section_callback'),
+        $setting_section ->set_page('stpPlugin')
     );
 
     // Defines a configuration field within a section
     add_settings_field(
-        'stp_api_text_field_0',
-        __( 'Url', 'wordpress' ),
-        'stp_api_text_field_0_render',
-        'stpPlugin',
-        'stp_api_stpPlugin_section'
+        $stp_api_text_field_0 ->set_id('stp_api_text_field_0'),
+        __( $stp_api_text_field_0 ->set_title('Url'), 'wordpress' ),
+        $stp_api_text_field_0 ->set_callback('stp_api_text_field_0_render'),
+        $stp_api_text_field_0 ->set_page('stpPlugin'),
+        $stp_api_text_field_0 ->set_section('stp_api_stpPlugin_section')
     );
 
     add_settings_field(
-        'stp_api_select_field_1',
-        __( 'Customer key', 'wordpress' ),
-        'stp_api_select_field_1_render',
-        'stpPlugin',
-        'stp_api_stpPlugin_section'
+        $stp_api_text_field_1 ->set_id('stp_api_text_field_1'),
+        __( $stp_api_text_field_1 ->set_title('Customer key'), 'wordpress' ),
+        $stp_api_text_field_1 ->set_callback('stp_api_text_field_1_render'),
+        $stp_api_text_field_1 ->set_page('stpPlugin'),
+        $stp_api_text_field_1 ->set_section('stp_api_stpPlugin_section')
     );
 
     add_settings_field(
-        'stp_api_select_field_2',
-        __( 'Customer secret', 'wordpress' ),
-        'stp_api_select_field_2_render',
-        'stpPlugin',
-        'stp_api_stpPlugin_section'
+        $stp_api_text_field_2 ->set_id('stp_api_text_field_2'),
+        __( $stp_api_text_field_2 ->set_title('Customer key'), 'wordpress' ),
+        $stp_api_text_field_2 ->set_callback('stp_api_text_field_2_render'),
+        $stp_api_text_field_2 ->set_page('stpPlugin'),
+        $stp_api_text_field_2 ->set_section('stp_api_stpPlugin_section')
     );
 }
 
@@ -59,11 +72,11 @@ function stp_api_text_field_0_render() {
     ?><input type='text' id='stp_api_text_field_0' name='stp_api_settings[stp_api_text_field_0]' value='<?php echo $options['stp_api_text_field_0']; ?>'><?php
 }
 
-function stp_api_select_field_1_render() {
+function stp_api_text_field_1_render() {
     $options = get_option( 'stp_api_settings' );
     ?><input type='text' id='stp_api_text_field_1' name='stp_api_settings[stp_api_text_field_1]' value='<?php echo $options['stp_api_text_field_1']; ?>'><?php
 }
-function stp_api_select_field_2_render() {
+function stp_api_text_field_2_render() {
     $options = get_option( 'stp_api_settings' );
     ?><input type='text' id='stp_api_text_field_2' name='stp_api_settings[stp_api_text_field_2]' value='<?php echo $options['stp_api_text_field_2']; ?>'><?php
 }
@@ -75,24 +88,23 @@ function stp_api_settings_section_callback() {
 // Generate html
 function stp_api_options_page( $hook ) {
     ?>
-    <form action='options.php' method='post'>
+    <div class="container">
+        <form action='options.php' method='post'>
 
-    <?php echo "<h1 class='text-center mt-2 mb-3'>" . get_admin_page_title() . "</h1>"; ?>
+        <?php echo "<h1 class='text-center mt-2 mb-3'>" . get_admin_page_title() . "</h1>"; ?>
 
-        <?php
-        settings_fields( 'stpPlugin' );
-        do_settings_sections( 'stpPlugin' );
-        submit_button();
-        ?>
+            <?php
+            settings_fields( 'stpPlugin' );
+            do_settings_sections( 'stpPlugin' );
+            submit_button();
+            ?>
 
-
+        </form>
         <button type="button" class="btn btn-success mt-2" name="btnProducts" id="btnProducts">Load Products</button>
-
-    </form>
-    
-    <div class="container" id="searchData"></div>
-    <div class="container" id="tableData"></div>
-    <div class="container d-flex justify-content-between invisible" id="pagination"></div>
+        <div id="searchData"></div>
+        <div id="tableData"></div>
+        <div class="d-flex justify-content-between invisible" id="pagination"></div>
+    </div>
     <?php
 }
 
